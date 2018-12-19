@@ -6,5 +6,6 @@ mongoose.connect('mongodb://localhost:27017/EmployeeDB', {useNewUrlParser: true}
 		console.log('Error in DB connection: ' + err);
 	}
 });
+mongoose.Promise = global.Promise;
 
 require('./employee.model');

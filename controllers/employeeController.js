@@ -9,11 +9,12 @@ router.get('/', (req, res) => {
 	});
 });
 router.post('/', (req, res) => {
-	if(req.body._id == '')
+	//res.send('asdasd');
+	if(req.body._id == ''){
 		insertRecord(req, res);
-		else
+	}else{
 		updateRecord(req, res);
-
+	}
 });
 
 function insertRecord(req, res){
@@ -32,8 +33,7 @@ function insertRecord(req, res){
 					viewTitle: "Insert Employee",
 					employee: req.body
 				});
-			}
-			else{
+			}else{
 				console.log('Error during record insertion : ' + err);
 			}
 		}
@@ -41,7 +41,7 @@ function insertRecord(req, res){
 }
 
 function updateRecord(req, res){
-	Employee.findOneAndUpdate({_id: req.body._id}, req.body, {new: true}, (err, doc) => {
+	Employee.findOneAndUpdate({_id: req.body._id}, req.body, {new: true, runValidators: true}, (err, doc) => {
 		if(!err){
 			res.redirect('employee/list');
 		}else{
@@ -51,8 +51,7 @@ function updateRecord(req, res){
 					viewTitle: 'Update Employee',
 					employee: req.body
 				});
-			}
-			else
+			}else
 				console.log('Error during record update : ' + err);
 		}
 	});
@@ -74,6 +73,7 @@ function handleValidationError(err, body){
 		switch (err.errors[field].path){
 			case 'fullName':
 				body['fullNameError'] = err.errors[field].message;
+				console.log(body['fullNameError']);
 				break;
 			case 'email':
 				body['emailError'] = err.errors[field].message;
